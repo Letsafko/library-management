@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.JavaScript;
 using Domain.Books.ValueObjects;
-using SharedKernel;
 using SharedKernel.Primitives;
 
 namespace Domain.Books;
@@ -15,8 +13,8 @@ public sealed class Book : Entity<int>
         Isbn isbn,
         string title,
         string author,
-        DateTimeOffset createdDatetime,
-        DateTimeOffset lastModifiedDatetime) : base(createdDatetime, lastModifiedDatetime)
+        DateTime createdDatetime,
+        DateTime lastModifiedDatetime) : base(createdDatetime, lastModifiedDatetime)
     {
         _bookCopies = [];
         Author = author;
@@ -28,7 +26,7 @@ public sealed class Book : Entity<int>
         string isbn,
         string title,
         string author,
-        DateTimeOffset createdDatetime,
+        DateTime createdDatetime,
         int numberOfCopies = 1)
     {
         var isbnResult = Isbn.Create(isbn);
@@ -58,7 +56,7 @@ public sealed class Book : Entity<int>
     
     private void AddCopy()
     {
-        var bookCopy = BookCopy.Create(book: this, DateTimeOffset.UtcNow);
+        var bookCopy = BookCopy.Create(bookId: this.Id, DateTime.UtcNow);
         _bookCopies.Add(bookCopy);
     }
     

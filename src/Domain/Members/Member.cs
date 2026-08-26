@@ -17,8 +17,8 @@ public sealed class Member : Entity<int>
         string lastName,
         string email,
         MembershipType membershipType,
-        DateTimeOffset createdDatetime,
-        DateTimeOffset lastModifiedDatetime) : base(createdDatetime, lastModifiedDatetime)
+        DateTime createdDatetime,
+        DateTime lastModifiedDatetime) : base(createdDatetime, lastModifiedDatetime)
     {
         MembershipType = membershipType;
         FirstName = firstName;
@@ -32,7 +32,7 @@ public sealed class Member : Entity<int>
         string lastName,
         string email,
         MembershipType membershipType,
-        DateTimeOffset createdDatetime)
+        DateTime createdDatetime)
     {
         return new Member(
             firstName,
@@ -53,7 +53,7 @@ public sealed class Member : Entity<int>
     public IReadOnlyList<Loan> Loans => _loans;
     
     
-    public Result<Loan> BorrowBook(BookCopy bookCopy, DateTimeOffset currentDatetime)
+    public Result<Loan> BorrowBook(BookCopy bookCopy, DateTime currentDatetime)
     {
         if (HasReachedLoanLimit)
         {

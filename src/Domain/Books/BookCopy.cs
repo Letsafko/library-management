@@ -6,25 +6,22 @@ namespace Domain.Books;
 public sealed class BookCopy : Entity<int>
 {
     private BookCopy(
+        int bookId,
         bool isAvailable,
-        Book book,
-        DateTimeOffset createdDatetime,
-        DateTimeOffset lastModifiedDatetime) : base(createdDatetime, lastModifiedDatetime)
+        DateTime createdDatetime,
+        DateTime lastModifiedDatetime) : base(createdDatetime, lastModifiedDatetime)
     {
         IsAvailable = isAvailable;
-        Book = book;
+        BookId = bookId;
     }
 
-    public Book Book { get; private set; }
+    public int BookId { get; private set; }
+    public Book Book { get; private set; } = null!;
     public bool IsAvailable { get; private set; }
     
-    internal static BookCopy Create(Book book, DateTimeOffset createdDatetime)
+    internal static BookCopy Create(int bookId, DateTime createdDatetime)
     {
-        return new BookCopy(
-            isAvailable: true,
-            book,
-            createdDatetime,
-            createdDatetime);
+        return new BookCopy(bookId, true, createdDatetime, createdDatetime);
     }
     
     internal Result MarkAsBorrowed()

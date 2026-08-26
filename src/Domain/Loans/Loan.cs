@@ -11,8 +11,8 @@ public sealed class Loan : Entity<int>
         DateTime borrowedAt,
         DateTime dueDate,
         DateTime? returnedAt,
-        DateTimeOffset createdDatetime,
-        DateTimeOffset lastModifiedDatetime) : base(createdDatetime, lastModifiedDatetime)
+        DateTime createdDatetime,
+        DateTime lastModifiedDatetime) : base(createdDatetime, lastModifiedDatetime)
     {
         MemberId = memberId;
         BookCopyId = bookCopyId;
@@ -32,15 +32,14 @@ public sealed class Loan : Entity<int>
         int memberId, 
         int bookCopyId,
         TimeSpan loanDuration,
-        DateTimeOffset currentDatetime)
+        DateTime currentDatetime)
     {
-        var utcNow = currentDatetime.UtcDateTime;
-        var dueDate = utcNow.Add(loanDuration);
+        var dueDate = currentDatetime.Add(loanDuration);
 
         return new Loan(
             memberId,
             bookCopyId,
-            borrowedAt: utcNow,
+            borrowedAt: currentDatetime,
             dueDate,
             returnedAt: null,
             currentDatetime,

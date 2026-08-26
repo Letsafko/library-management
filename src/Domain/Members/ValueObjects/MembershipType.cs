@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SharedKernel.Primitives;
 
 namespace Domain.Members.ValueObjects;
@@ -15,6 +16,12 @@ public sealed class MembershipType : ValueObject
         LoanDuration = loanDuration;
         Name = name;
     }
+
+    private static readonly IReadOnlyList<MembershipType> All = new List<MembershipType> { Standard, Student };
+    public static MembershipType GetByName(string membershipName)
+    {
+        return All.Single(mt => mt.Name == membershipName);
+    }
     
     public int MaxSimultaneousLoans { get; }
     public TimeSpan LoanDuration { get; }
@@ -24,4 +31,5 @@ public sealed class MembershipType : ValueObject
     {
         yield return Name;
     }
+    
 }

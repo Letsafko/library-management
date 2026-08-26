@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ProjectGuid>01a03b74-4bb2-75ec-96d6-446d0af65d81</ProjectGuid>
+    </PropertyGroup>
+
+    <ItemGroup Label="Microsoft">
+        <PackageReference Include="Microsoft.Extensions.Logging.Console"/>
+        <PackageReference Include="EFCore.NamingConventions" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Application\Application.csproj" />
+    </ItemGroup>
+
+</Project>

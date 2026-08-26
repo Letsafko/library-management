@@ -2,8 +2,8 @@
 
 namespace SharedKernel.Primitives;
 
-public abstract class Entity(DateTimeOffset createdDatetime, DateTimeOffset lastModifiedDatetime)
+public abstract class Entity(DateTime createdDatetime, DateTime lastModifiedDatetime)
 {
-    public DateTimeOffset LastModifiedDatetime { get; private set; } = lastModifiedDatetime;
-    public DateTimeOffset CreatedDatetime { get; } = createdDatetime;
+    public DateTime LastModifiedDatetime { get; private set; } = lastModifiedDatetime;
+    public DateTime CreatedDatetime { get; } = createdDatetime;
 }
