@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <ProjectGuid>01a03b74-4bb2-7537-9d61-4763e8fd4f61</ProjectGuid>
+    </PropertyGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\SharedKernel\SharedKernel.csproj" />
+  </ItemGroup>
+    
+</Project>
