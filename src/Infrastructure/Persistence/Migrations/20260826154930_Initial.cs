@@ -22,7 +22,6 @@ namespace Infrastructure.Persistence.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     author = table.Column<string>(type: "character varying(300)", unicode: false, maxLength: 300, nullable: false),
                     title = table.Column<string>(type: "character varying(500)", unicode: false, maxLength: 500, nullable: false),
-                    isbn = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     lastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     createdOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -56,6 +55,7 @@ namespace Infrastructure.Persistence.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     bookId = table.Column<int>(type: "integer", nullable: false),
+                    isbn = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     isAvailable = table.Column<bool>(type: "boolean", nullable: false),
                     lastModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     createdOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -108,8 +108,8 @@ namespace Infrastructure.Persistence.Migrations
                 column: "bookId");
 
             migrationBuilder.CreateIndex(
-                name: "iX_books_isbn",
-                table: "books",
+                name: "iX_bookCopies_isbn",
+                table: "bookCopies",
                 column: "isbn",
                 unique: true);
 

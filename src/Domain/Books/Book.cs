@@ -10,7 +10,6 @@ public sealed class Book : Entity<int>
 {
     private readonly List<BookCopy> _bookCopies;
     private Book(
-        Isbn isbn,
         string title,
         string author,
         DateTime createdDatetime,
@@ -19,44 +18,34 @@ public sealed class Book : Entity<int>
         _bookCopies = [];
         Author = author;
         Title = title;
-        Isbn = isbn;
     }
     
     public static Result<Book> Create(
         string isbn,
         string title,
         string author,
-        DateTime createdDatetime,
-        int numberOfCopies = 1)
+        DateTime createdDatetime)
     {
+        var book = new Book(title, author, createdDatetime, createdDatetime);
         var isbnResult = Isbn.Create(isbn);
         if (!isbnResult.IsSuccess)
         {
             return isbnResult.Error;
         }
-
-        var book = new Book(isbnResult.Value, title, author, createdDatetime, createdDatetime);
-        for (var i = 0; i < numberOfCopies; i++)
-        {
-            book.AddCopy();
-        }
         
+        book.AddCopy(isbnResult.Value, createdDatetime);
         return book;
     }
     
     public IReadOnlyList<BookCopy> BookCopies => _bookCopies;
-    
     public int AvailableCopiesCount => _bookCopies.Count(c => c.IsAvailable);
-    
     public int TotalCopiesCount => _bookCopies.Count;
     public string Author { get; private set; }
-    
     public string Title { get; private set; }
-    public Isbn Isbn { get; private set; }
     
-    private void AddCopy()
+    private void AddCopy(Isbn isbn, DateTime currentDatetime)
     {
-        var bookCopy = BookCopy.Create(bookId: this.Id, DateTime.UtcNow);
+        var bookCopy = BookCopy.Create(bookId: Id, isbn, currentDatetime);
         _bookCopies.Add(bookCopy);
     }
     

@@ -42,12 +42,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("createdOn");
 
-                    b.Property<string>("Isbn")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("character varying(13)")
-                        .HasColumnName("isbn");
-
                     b.Property<DateTime>("LastModifiedDatetime")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("lastModifiedOn");
@@ -61,10 +55,6 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_books");
-
-                    b.HasIndex("Isbn")
-                        .IsUnique()
-                        .HasDatabaseName("iX_books_isbn");
 
                     b.ToTable("books", (string)null);
                 });
@@ -90,6 +80,12 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("isAvailable");
 
+                    b.Property<string>("Isbn")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("character varying(13)")
+                        .HasColumnName("isbn");
+
                     b.Property<DateTime>("LastModifiedDatetime")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("lastModifiedOn");
@@ -99,6 +95,10 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("BookId")
                         .HasDatabaseName("iX_bookCopies_bookId");
+
+                    b.HasIndex("Isbn")
+                        .IsUnique()
+                        .HasDatabaseName("iX_bookCopies_isbn");
 
                     b.ToTable("bookCopies", (string)null);
                 });

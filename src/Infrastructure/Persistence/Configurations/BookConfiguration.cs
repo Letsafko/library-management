@@ -27,12 +27,6 @@ public sealed class BookConfiguration : EntityTypeBaseConfiguration<Book>
             .IsRequired()
             .HasMaxLength(300);
 
-        builder.Property(static b => b.Isbn)
-            .HasColumnName("isbn")
-            .IsRequired()
-            .HasMaxLength(13)
-            .HasConversion(static x => x.Value, static x => Isbn.Create(x).Value);
-
         builder.HasMany(b => b.BookCopies)
             .WithOne(c => c.Book)
             .HasForeignKey(c => c.BookId)
@@ -40,8 +34,5 @@ public sealed class BookConfiguration : EntityTypeBaseConfiguration<Book>
 
         builder.Ignore(b => b.AvailableCopiesCount);
         builder.Ignore(b => b.TotalCopiesCount);
-
-        builder.HasIndex(b => b.Isbn).IsUnique();
-
     }
 }

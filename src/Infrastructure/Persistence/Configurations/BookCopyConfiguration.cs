@@ -1,4 +1,5 @@
 using Domain.Books;
+using Domain.Books.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -24,5 +25,13 @@ public sealed class BookCopyConfiguration : EntityTypeBaseConfiguration<BookCopy
             .WithMany(b => b.BookCopies)
             .HasForeignKey(bc => bc.BookId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Property(static b => b.Isbn)
+            .HasColumnName("isbn")
+            .IsRequired()
+            .HasMaxLength(13)
+            .HasConversion(static x => x.Value, static x => Isbn.Create(x).Value);
+        
+        builder.HasIndex(b => b.Isbn).IsUnique();
     }
 }

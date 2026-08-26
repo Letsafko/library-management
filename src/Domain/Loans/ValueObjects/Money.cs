@@ -15,10 +15,8 @@ public sealed class Money : ValueObject, IValueObject<Money, decimal>
     {
         Amount = amount;
     }
-
+    
     private decimal Amount { get; }
-
-
     public decimal Value => Amount;
     
     public static Result<Money> Create(decimal amount)
