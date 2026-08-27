@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Extensions;
 
-internal static class DatabaseMigrationExtensions
+internal static class DatabaseExtensions
 {
 	internal static async Task ApplyMigrationsAsync(this WebApplication app)
 	{
