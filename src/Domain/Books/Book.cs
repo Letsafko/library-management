@@ -27,13 +27,12 @@ public sealed class Book : Entity<int>
         DateTime createdDatetime)
     {
         var book = new Book(title, author, createdDatetime, createdDatetime);
-        var isbnResult = Isbn.Create(isbn);
-        if (!isbnResult.IsSuccess)
+        var result = book.AddCopy(isbn, createdDatetime);
+        if (!result.IsSuccess)
         {
-            return isbnResult.Error;
+            return result.Error;
         }
         
-        book.AddCopy(isbnResult.Value, createdDatetime);
         return book;
     }
     
@@ -43,10 +42,16 @@ public sealed class Book : Entity<int>
     public string Author { get; private set; }
     public string Title { get; private set; }
     
-    private void AddCopy(Isbn isbn, DateTime currentDatetime)
+    public Result AddCopy(string isbn, DateTime currentDatetime)
     {
-        var bookCopy = BookCopy.Create(bookId: Id, isbn, currentDatetime);
+        var isbnResult = Isbn.Create(isbn);
+        if (!isbnResult.IsSuccess)
+        {
+            return isbnResult.Error;
+        }
+        var bookCopy = BookCopy.Create(bookId: Id, isbnResult.Value, currentDatetime);
         _bookCopies.Add(bookCopy);
+        return Result.Success();
     }
     
     public Result MarkCopyAsBorrowed(int bookCopyId)

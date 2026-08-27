@@ -35,4 +35,12 @@ public static class BookErrors
     public static ErrorResult CopyAlreadyReturned => ErrorResult.Problem(
         code: "BookCopy.AlreadyReturned", 
         description: "Book copy has already been returned.");
+    
+    public static ErrorResult BookNotFound => ErrorResult.NotFound(
+        code: "Book.NotFound",
+        description: "Book not found.");
+
+    public static ErrorResult InvalidBookId => ErrorResult.Problem(
+        code: "Book.InvalidId",
+        description: "Book id must be greater than zero.");
 }
