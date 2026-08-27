@@ -1,5 +1,4 @@
 using Domain.Books;
-using Domain.Books.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

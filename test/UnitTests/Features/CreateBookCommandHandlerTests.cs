@@ -4,11 +4,9 @@ using System.Threading.Tasks;
 using Application.Features.Books;
 using Application.Features.Books.Abstracts;
 using Application.Features.Books.Create;
-using Application.Messaging;
 using Bogus;
 using Domain.Books;
 using FluentAssertions;
-using FluentValidation;
 using Infrastructure.Behaviors;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -34,36 +32,19 @@ public sealed class CreateBookCommandFaker : Faker<CreateBookCommand>
     }
 }
 
-public sealed class CreateBookCommandHandlerTests
+public sealed class CreateBookCommandHandlerTests : CommandHandlerBaseTests<CreateBookCommand, BookResponse>
 {
-    private readonly Mock<MockLogger<IRequestHandler<CreateBookCommand, BookResponse>>> _logger;
-#pragma warning disable CA1859
-    private readonly IRequestHandler<CreateBookCommand, BookResponse> _requestHandler;
-#pragma warning restore CA1859
+    private readonly LoggingDecorator.RequestHandler<CreateBookCommand, BookResponse> _requestHandler;
     private readonly Mock<IBookRepository> _bookRepository;
-    
-    private static readonly DateTime DateTime = new (2025, 1, 15, 12, 0, 0, DateTimeKind.Utc);
-    
-    public CreateBookCommandHandlerTests()
+    public CreateBookCommandHandlerTests() : base(new CreateBookCommandValidator())
     {
-        var dateTimeProvider = new Mock<IDateTimeProvider>();
-        dateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTime);
-        
         _bookRepository = new Mock<IBookRepository>();
-        
-        var services = new Mock<IServiceProvider>();
-        services
-            .Setup(x => x.GetService(typeof(IValidator<CreateBookCommand>)))
-            .Returns(new CreateBookCommandValidator());
-        
-        var handler = new CreateBookCommandHandler(_bookRepository.Object, dateTimeProvider.Object);
-        
+        var innerHandler = new CreateBookCommandHandler(_bookRepository.Object, DateTimeProvider.Object);
         var validatorHandler = new ValidationDecorator.RequestHandler<CreateBookCommand, BookResponse>(
-            handler, 
-            services.Object);
+            innerHandler, 
+            Services.Object);
         
-        _logger = new Mock<MockLogger<IRequestHandler<CreateBookCommand, BookResponse>>>();
-        _requestHandler = new LoggingDecorator.RequestHandler<CreateBookCommand, BookResponse>(validatorHandler, _logger.Object);
+        _requestHandler = new LoggingDecorator.RequestHandler<CreateBookCommand, BookResponse>(validatorHandler, Logger.Object);
     }
     
     [Fact]
@@ -95,10 +76,10 @@ public sealed class CreateBookCommandHandlerTests
                 It.IsAny<CancellationToken>()),
             Times.Once);
         
-        _logger.Verify(x
+        Logger.Verify(x
             => x.Log(LogLevel.Information, $"Processing request {nameof(CreateBookCommand)}", It.IsAny<Exception?>()), Times.Once);
         
-        _logger.Verify(x
+        Logger.Verify(x
             => x.Log(LogLevel.Information, $"Completed request {nameof(CreateBookCommand)} successfully.", It.IsAny<Exception?>()), Times.Once);
     }
 
@@ -113,7 +94,7 @@ public sealed class CreateBookCommandHandlerTests
         
         result.Error.Should().Be(ErrorResult.NullValue);
         _bookRepository.Verify(x => x.AddAsync(It.IsAny<Book>(), It.IsAny<CancellationToken>()), Times.Never);
-        _logger.Verify(x
+        Logger.Verify(x
                 => x.Log(
                     LogLevel.Error,
                     $"Completed request {nameof(CreateBookCommand)} with error(s): {{\"Code\":\"General.Null\",\"Description\":\"Null value was provided\",\"Type\":\"Failure\"}}", 

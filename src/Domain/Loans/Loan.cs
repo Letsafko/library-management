@@ -35,7 +35,6 @@ public sealed class Loan : Entity<int>
         DateTime currentDatetime)
     {
         var dueDate = currentDatetime.Add(loanDuration);
-
         return new Loan(
             memberId,
             bookCopyId,

@@ -43,4 +43,12 @@ public static class BookErrors
     public static ErrorResult InvalidBookId => ErrorResult.Problem(
         code: "Book.InvalidId",
         description: "Book id must be greater than zero.");
+
+    public static ErrorResult BookCopyNotFound => ErrorResult.NotFound(
+        code: "BookCopy.NotFound",
+        description: "Book copy not found.");
+
+    public static ErrorResult InvalidBookCopyId => ErrorResult.Problem(
+        code: "BookCopy.InvalidId",
+        description: "Book copy id must be greater than zero.");
 }

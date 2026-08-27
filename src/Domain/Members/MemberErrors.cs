@@ -2,17 +2,21 @@
 
 namespace Domain.Members;
 
-internal static class MemberErrors
+public static class MemberErrors
 {
-    internal static ErrorResult LoanLimitReached => ErrorResult.Problem(
+    public static ErrorResult LoanLimitReached => ErrorResult.Problem(
         code: "Member.LoanLimitReached",
         description: "Load limit exceeded.");
         
-    internal static ErrorResult BookNotAvailable => ErrorResult.Problem(
-        code: "Member.BookNotAvailable",
-        description: "Book not available.");
-    
-    internal static ErrorResult LoanNotFound => ErrorResult.Problem(
+    public static ErrorResult LoanNotFound => ErrorResult.Problem(
         code: "Member.LoanNotFound",
         description: "Member loan not found.");
+
+    public static ErrorResult MemberNotFound => ErrorResult.NotFound(
+        code: "Member.NotFound",
+        description: "Member not found.");
+
+    public static ErrorResult InvalidMemberId => ErrorResult.Problem(
+        code: "Member.InvalidId",
+        description: "Member id must be greater than zero.");
 }

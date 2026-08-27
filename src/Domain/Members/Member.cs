@@ -9,10 +9,10 @@ using SharedKernel.Primitives;
 
 namespace Domain.Members;
 
-public sealed class Member : Entity<int>
+public class Member : Entity<int>
 {
     private readonly List<Loan> _loans;
-    private Member(
+    protected Member(
         string firstName,
         string lastName,
         string email,
@@ -27,7 +27,7 @@ public sealed class Member : Entity<int>
         _loans = [];
     }
     
-    internal static Member Create(
+    public static Member Create(
         string firstName,
         string lastName,
         string email,
@@ -52,17 +52,11 @@ public sealed class Member : Entity<int>
     
     public IReadOnlyList<Loan> Loans => _loans;
     
-    
     public Result<Loan> BorrowBook(BookCopy bookCopy, DateTime currentDatetime)
     {
         if (HasReachedLoanLimit)
         {
             return MemberErrors.LoanLimitReached;
-        }
-
-        if (!bookCopy.IsAvailable)
-        {
-            return MemberErrors.BookNotAvailable;
         }
 
         var markBorrowedResult = bookCopy.MarkAsBorrowed();
@@ -73,11 +67,10 @@ public sealed class Member : Entity<int>
 
         var loan = Loan.Create(Id, bookCopy.Id, MembershipType.LoanDuration, currentDatetime);
         _loans.Add(loan);
-
+        
         return loan;
     }
     
-
     public Result<Money> ReturnBook(int bookCopyId, DateTime currentDatetime)
     {
         var loan = _loans.FirstOrDefault(l => l.BookCopyId == bookCopyId && !l.IsReturned);

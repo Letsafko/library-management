@@ -1,7 +1,5 @@
-using Api;
 using Api.Extensions;
 using Application.Features.Books.Create;
-using Asp.Versioning;
 using FluentValidation;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;

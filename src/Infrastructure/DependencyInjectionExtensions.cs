@@ -1,4 +1,5 @@
 ﻿using Application.Features.Books.Abstracts;
+using Application.Features.Loans;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Options;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,7 @@ public static class DependencyInjectionExtensions
     private static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IBookRepository, BookRepository>();
+        services.AddScoped<IMemberRepository, MemberRepository>();
     }
 
     private static void AddDateTimeProvider(this IServiceCollection services)

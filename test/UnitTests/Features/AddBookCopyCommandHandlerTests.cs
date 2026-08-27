@@ -4,11 +4,9 @@ using System.Threading.Tasks;
 using Application.Features.Books;
 using Application.Features.Books.Abstracts;
 using Application.Features.Books.AddCopy;
-using Application.Messaging;
 using Bogus;
 using Domain.Books;
 using FluentAssertions;
-using FluentValidation;
 using Infrastructure.Behaviors;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -30,36 +28,19 @@ public sealed class AddBookCopyCommandFaker : Faker<AddBookCopyCommand>
     }
 }
 
-public sealed class AddBookCopyCommandHandlerTests
+public sealed class AddBookCopyCommandHandlerTests : CommandHandlerBaseTests<AddBookCopyCommand, BookResponse>
 {
-    private readonly Mock<MockLogger<IRequestHandler<AddBookCopyCommand, BookResponse>>> _logger;
-#pragma warning disable CA1859
-    private readonly IRequestHandler<AddBookCopyCommand, BookResponse> _requestHandler;
-#pragma warning restore CA1859
+    private readonly LoggingDecorator.RequestHandler<AddBookCopyCommand, BookResponse> _handler;
     private readonly Mock<IBookRepository> _bookRepository;
-
-    private static readonly DateTime DateTime = new(2025, 1, 15, 12, 0, 0, DateTimeKind.Utc);
-
-    public AddBookCopyCommandHandlerTests()
+    public AddBookCopyCommandHandlerTests(): base(new AddBookCopyCommandValidator())
     {
-        var dateTimeProvider = new Mock<IDateTimeProvider>();
-        dateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTime);
-
         _bookRepository = new Mock<IBookRepository>();
-
-        var services = new Mock<IServiceProvider>();
-        services
-            .Setup(x => x.GetService(typeof(IValidator<AddBookCopyCommand>)))
-            .Returns(new AddBookCopyCommandValidator());
-
-        var handler = new AddBookCopyCommandHandler(_bookRepository.Object, dateTimeProvider.Object);
-
+        var innerHandler = new AddBookCopyCommandHandler(_bookRepository.Object, DateTimeProvider.Object);
         var validatorHandler = new ValidationDecorator.RequestHandler<AddBookCopyCommand, BookResponse>(
-            handler,
-            services.Object);
+            innerHandler,
+            Services.Object);
 
-        _logger = new Mock<MockLogger<IRequestHandler<AddBookCopyCommand, BookResponse>>>();
-        _requestHandler = new LoggingDecorator.RequestHandler<AddBookCopyCommand, BookResponse>(validatorHandler, _logger.Object);
+        _handler = new LoggingDecorator.RequestHandler<AddBookCopyCommand, BookResponse>(validatorHandler, Logger.Object);
     }
 
     [Fact]
@@ -67,7 +48,12 @@ public sealed class AddBookCopyCommandHandlerTests
     {
         // Arrange
         const string existingIsbn = "1234567890";
-        var existingBook = Book.Create(existingIsbn, "Clean Code", "Robert Martin", DateTime).Value;
+        
+        var existingBook = Book.Create(existingIsbn, 
+            title: "Clean Code", 
+            author: "Robert Martin",
+            createdDatetime: DateTime).Value;
+        
         var command = new AddBookCopyCommandFaker(bookId: 1).Generate();
 
         _bookRepository
@@ -75,7 +61,7 @@ public sealed class AddBookCopyCommandHandlerTests
             .ReturnsAsync(existingBook);
 
         // Act
-        var result = await _requestHandler.HandleAsync(command, CancellationToken.None);
+        var result = await _handler.HandleAsync(command, CancellationToken.None);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -92,10 +78,10 @@ public sealed class AddBookCopyCommandHandlerTests
                 It.IsAny<CancellationToken>()),
             Times.Once);
 
-        _logger.Verify(x
+        Logger.Verify(x
             => x.Log(LogLevel.Information, $"Processing request {nameof(AddBookCopyCommand)}", It.IsAny<Exception?>()), Times.Once);
 
-        _logger.Verify(x
+        Logger.Verify(x
             => x.Log(LogLevel.Information, $"Completed request {nameof(AddBookCopyCommand)} successfully.", It.IsAny<Exception?>()), Times.Once);
     }
 
@@ -103,14 +89,14 @@ public sealed class AddBookCopyCommandHandlerTests
     public async Task ShouldReturnsNullValueErrorWhenRequestIsNull()
     {
         // Act
-        var result = await _requestHandler.HandleAsync(null, CancellationToken.None);
+        var result = await _handler.HandleAsync(null, CancellationToken.None);
 
         // Assert
         result.IsSuccess.Should().BeFalse();
         result.Error.Should().Be(ErrorResult.NullValue);
 
         _bookRepository.Verify(x => x.UpdateAsync(It.IsAny<Book>(), It.IsAny<CancellationToken>()), Times.Never);
-        _logger.Verify(x
+        Logger.Verify(x
                 => x.Log(
                     LogLevel.Error,
                     $"Completed request {nameof(AddBookCopyCommand)} with error(s): {{\"Code\":\"General.Null\",\"Description\":\"Null value was provided\",\"Type\":\"Failure\"}}",
@@ -129,14 +115,14 @@ public sealed class AddBookCopyCommandHandlerTests
             .ReturnsAsync((Book?)null);
 
         // Act
-        var result = await _requestHandler.HandleAsync(command, CancellationToken.None);
+        var result = await _handler.HandleAsync(command, CancellationToken.None);
 
         // Assert
         result.IsSuccess.Should().BeFalse();
         result.Error.Should().Be(BookErrors.BookNotFound);
 
         _bookRepository.Verify(x => x.UpdateAsync(It.IsAny<Book>(), It.IsAny<CancellationToken>()), Times.Never);
-        _logger.Verify(x
+        Logger.Verify(x
                 => x.Log(
                     LogLevel.Error,
                     $"Completed request {nameof(AddBookCopyCommand)} with error(s): {{\"Code\":\"Book.NotFound\",\"Description\":\"Book not found.\",\"Type\":\"NotFound\"}}",
@@ -171,7 +157,7 @@ public sealed class AddBookCopyCommandHandlerTests
             .ReturnsAsync(existingBook);
 
         // Act
-        var result = await _requestHandler.HandleAsync(command, CancellationToken.None);
+        var result = await _handler.HandleAsync(command, CancellationToken.None);
 
         // Assert
         result.IsSuccess.Should().BeFalse();
@@ -184,7 +170,7 @@ public sealed class AddBookCopyCommandHandlerTests
     public async Task ShouldReturnsMissingFieldErrorWhenCommandIsInvalid(AddBookCopyCommand command, ErrorResult error)
     {
         // Act
-        var result = await _requestHandler.HandleAsync(command, CancellationToken.None);
+        var result = await _handler.HandleAsync(command, CancellationToken.None);
 
         // Assert
         result.IsSuccess.Should().BeFalse();

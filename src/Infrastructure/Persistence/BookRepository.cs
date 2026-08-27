@@ -26,4 +26,10 @@ public sealed class BookRepository(ApplicationDbContext context) : IBookReposito
         context.Update(book);
         await context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<BookCopy?> GetBookCopyByIdAsync(int bookCopyId, CancellationToken cancellationToken)
+    {
+        return await context.BookCopies
+            .FirstOrDefaultAsync(bc => bc.Id == bookCopyId, cancellationToken);
+    }
 }

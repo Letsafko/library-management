@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using Infrastructure.Persistence.Options;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
 namespace Api;
 
