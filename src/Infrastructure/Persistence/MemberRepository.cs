@@ -22,4 +22,10 @@ public sealed class MemberRepository(ApplicationDbContext context) : IMemberRepo
         context.Update(bookCopy);
         await context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task UpdateAsync(Member member, CancellationToken cancellationToken)
+    {
+        context.Update(member);
+        await context.SaveChangesAsync(cancellationToken);
+    }
 }

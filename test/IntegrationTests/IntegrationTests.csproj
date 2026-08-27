@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Api\Api.csproj" />
+      <ProjectReference Include="..\Support.SharedTests\Support.SharedTests.csproj" />
     </ItemGroup>
     
     <PropertyGroup>

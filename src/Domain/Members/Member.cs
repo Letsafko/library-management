@@ -49,7 +49,6 @@ public class Member : Entity<int>
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public string Email {get; private set; }
-    
     public IReadOnlyList<Loan> Loans => _loans;
     
     public Result<Loan> BorrowBook(BookCopy bookCopy, DateTime currentDatetime)
@@ -71,15 +70,19 @@ public class Member : Entity<int>
         return loan;
     }
     
+    public Loan? GetActiveLoan(int bookCopyId)
+    {
+        return _loans.FirstOrDefault(l => l.BookCopyId == bookCopyId && !l.IsReturned);
+    }
+    
     public Result<Money> ReturnBook(int bookCopyId, DateTime currentDatetime)
     {
-        var loan = _loans.FirstOrDefault(l => l.BookCopyId == bookCopyId && !l.IsReturned);
-        
-        if (loan is null)
+        var loan = GetActiveLoan(bookCopyId);
+        if (loan == null)
         {
             return MemberErrors.LoanNotFound;
         }
-
+        
         var returnResult = loan.Return(currentDatetime);
         if (!returnResult.IsSuccess)
         {

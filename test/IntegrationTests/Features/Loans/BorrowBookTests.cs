@@ -12,11 +12,11 @@ using Domain.Members;
 using Domain.Members.ValueObjects;
 using FluentAssertions;
 using IntegrationTests.Infrastructure;
-using IntegrationTests.Stubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.Primitives;
+using Support.SharedTests.Fakers;
 using Xunit;
 
 namespace IntegrationTests.Features.Loans;
@@ -44,8 +44,7 @@ public sealed class BorrowBookTests(ApplicationFixture fixture)
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         result!.MemberId.Should().Be(member.Id);
         result.BookCopyId.Should().Be(bookCopyId);
-        _dateTimeProvider.UtcNow.Should().BeCloseTo(_dateTimeProvider.UtcNow, TimeSpan.FromSeconds(5));
-        result.DueDate.Should().BeCloseTo(_dateTimeProvider.UtcNow.Add(MembershipType.Standard.LoanDuration), TimeSpan.FromSeconds(5));
+        result.DueDate.Should().Be(_dateTimeProvider.UtcNow.Add(member.MembershipType.LoanDuration));
 
         var loan = await fixture.DbContext.Loans
             .FirstAsync(l => l.MemberId == member.Id && l.BookCopyId == bookCopyId);
@@ -154,8 +153,8 @@ public sealed class BorrowBookTests(ApplicationFixture fixture)
 
     private async Task<Member> SeedMemberAsync(MembershipType? membershipType = null)
     {
-        var member = new MemberStubFaker(
-            membershipType,
+        var member = new MemberFaker(
+            membershipType: membershipType,
             createdDatetime: _dateTimeProvider.UtcNow,
             lastModifiedDatetime: _dateTimeProvider.UtcNow).Generate();
 

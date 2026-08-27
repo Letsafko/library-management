@@ -1,13 +1,14 @@
 ﻿using System;
 using Bogus;
-using Domain.Members;
 using Domain.Members.ValueObjects;
+using Support.SharedTests.Stubs;
 
-namespace IntegrationTests.Stubs;
+namespace Support.SharedTests.Fakers;
 
-internal sealed class MemberStubFaker : Faker<MemberStubFaker.MemberStub>
+public sealed class MemberFaker : Faker<MemberStub>
 {
-    public MemberStubFaker(
+    public MemberFaker(
+        int id = 0,
         MembershipType? membershipType = null,
         DateTime? createdDatetime = null,
         DateTime? lastModifiedDatetime = null)
@@ -21,21 +22,14 @@ internal sealed class MemberStubFaker : Faker<MemberStubFaker.MemberStub>
             var lastModifiedDate = lastModifiedDatetime ?? f.Date.Between(createdDate, DateTime.UtcNow);
 
             return new MemberStub(
+                id,
                 firstName,
                 lastName,
                 email,
-                membershipType ?? f.PickRandom<MembershipType>(MembershipType.Standard, MembershipType.Student),
+                membershipType ?? f.PickRandom(MembershipType.Standard, MembershipType.Student),
                 createdDate,
                 lastModifiedDate);
             
         });
     }
-    
-    internal sealed class MemberStub(
-        string firstName,
-        string lastName,
-        string email,
-        MembershipType membershipType,
-        DateTime createdDate,
-        DateTime lastModifiedDate) : Member(firstName, lastName, email, membershipType, createdDate, lastModifiedDate);
 }

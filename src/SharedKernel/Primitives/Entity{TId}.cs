@@ -6,5 +6,5 @@ public abstract class Entity<TId>(
     DateTime createdDatetime,
     DateTime lastModifiedDatetime) : Entity(createdDatetime, lastModifiedDatetime)
 {
-    public TId Id { get; private set; } = default!;
+    public TId Id { get; protected set; } = default!;
 }

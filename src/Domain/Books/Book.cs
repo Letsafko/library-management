@@ -6,10 +6,10 @@ using SharedKernel.Primitives;
 
 namespace Domain.Books;
 
-public sealed class Book : Entity<int>
+public class Book : Entity<int>
 {
     private readonly List<BookCopy> _bookCopies;
-    private Book(
+    protected Book(
         string title,
         string author,
         DateTime createdDatetime,
@@ -41,28 +41,25 @@ public sealed class Book : Entity<int>
     public int TotalCopiesCount => _bookCopies.Count;
     public string Author { get; private set; }
     public string Title { get; private set; }
-    
-    public Result AddCopy(string isbn, DateTime currentDatetime)
+    public Result AddCopy(string isbn, DateTime currentDatetime, int bookCopyId = 0)
     {
         var isbnResult = Isbn.Create(isbn);
         if (!isbnResult.IsSuccess)
         {
             return isbnResult.Error;
         }
-        var bookCopy = BookCopy.Create(bookId: Id, isbnResult.Value, currentDatetime);
+        var bookCopy = BookCopy.Create(bookCopyId, bookId: Id, isbnResult.Value, currentDatetime);
         _bookCopies.Add(bookCopy);
         return Result.Success();
     }
-    
-    public Result MarkCopyAsBorrowed(int bookCopyId)
-    {
-        var bookCopy = _bookCopies.FirstOrDefault(c => c.Id == bookCopyId);
-        return bookCopy is null ? BookErrors.CopyNotFound : bookCopy.MarkAsBorrowed();
-    }
-    
     public Result MarkCopyAsReturned(int bookCopyId)
     {
-        var copy = _bookCopies.FirstOrDefault(c => c.Id == bookCopyId);
-        return copy is null ? BookErrors.CopyNotFound : copy.MarkAsReturned();
+        var bookCopyResult = FindBookCopy(bookCopyId);
+        return bookCopyResult.IsSuccess ? bookCopyResult.Value.MarkAsReturned() : bookCopyResult.Error;
+    }
+    private Result<BookCopy> FindBookCopy(int bookCopyId)
+    {
+        var bookCopy = _bookCopies.FirstOrDefault(c => c.Id == bookCopyId);
+        return bookCopy is null ? BookErrors.CopyNotFound : bookCopy;
     }
 }

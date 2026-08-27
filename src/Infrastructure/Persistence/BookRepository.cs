@@ -1,6 +1,7 @@
-﻿using System.Threading;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Application.Features.Books.Abstracts;
+using Application.Features.Books;
 using Domain.Books;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,5 +32,13 @@ public sealed class BookRepository(ApplicationDbContext context) : IBookReposito
     {
         return await context.BookCopies
             .FirstOrDefaultAsync(bc => bc.Id == bookCopyId, cancellationToken);
+    }
+
+    public async Task<Book?> GetBookByBookCopyIdAsync(int bookCopyId, CancellationToken cancellationToken)
+    {
+        return await context.Books
+            .Include(b => b.BookCopies.Where(bc => bc.Id == bookCopyId))
+            .AsSplitQuery()
+            .FirstOrDefaultAsync(b => b.BookCopies.Any(bc => bc.Id == bookCopyId), cancellationToken);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Application.Features.Books.Abstracts;
 using Application.Messaging;
 using Domain.Books;
 using SharedKernel.Primitives;

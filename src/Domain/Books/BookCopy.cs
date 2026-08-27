@@ -23,9 +23,12 @@ public sealed class BookCopy : Entity<int>
     public Book Book { get; private set; } = null!;
     public bool IsAvailable { get; private set; }
     
-    internal static BookCopy Create(int bookId, Isbn isbn, DateTime createdDatetime)
+    internal static BookCopy Create(int bookCopyId, int bookId, Isbn isbn, DateTime createdDatetime)
     {
-        return new BookCopy(bookId, isbn, true, createdDatetime, createdDatetime);
+        return new BookCopy(bookId, isbn, true, createdDatetime, createdDatetime)
+        {
+            Id = bookCopyId
+        };
     }
     
     internal Result MarkAsBorrowed()

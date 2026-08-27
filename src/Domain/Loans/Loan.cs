@@ -45,14 +45,9 @@ public sealed class Loan : Entity<int>
             currentDatetime);
     }
 
-    private bool IsOverdue(DateTime currentDate)
-    {
-        return !IsReturned && currentDate > DueDate;
-    }
-
     public int GetDaysLate(DateTime currentDate)
     {
-        if (!IsReturned && IsOverdue(currentDate))
+        if (IsOverdue(currentDate))
         {
             return (currentDate.Date - DueDate.Date).Days;
         }
@@ -74,5 +69,10 @@ public sealed class Loan : Entity<int>
 
         ReturnedAt = returnedDatetime;
         return Result.Success();
+    }
+    
+    private bool IsOverdue(DateTime currentDate)
+    {
+        return !IsReturned && currentDate > DueDate;
     }
 }
