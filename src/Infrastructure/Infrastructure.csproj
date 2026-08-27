@@ -10,10 +10,15 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"/>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+        <PackageReference Include="Scrutor" />
     </ItemGroup>
     
     <ItemGroup>
       <ProjectReference Include="..\Application\Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="UnitTests" />
     </ItemGroup>
 
 </Project>

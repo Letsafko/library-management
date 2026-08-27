@@ -1,4 +1,5 @@
-﻿using Infrastructure.Persistence;
+﻿using Application.Features.Books.Abstracts;
+using Infrastructure.Persistence;
 using Infrastructure.Persistence.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,9 +13,11 @@ public static class DependencyInjectionExtensions
 {
     public static void AddInfrastructure(this IServiceCollection services)
     {
+        services.AddPipelineBehaviors();
         services.ConfigureOptions<DatabaseOptionsSetup>();
         services.AddDateTimeProvider();
         services.AddDatabase();
+        services.AddRepositories();
     }
     private static void AddDatabase(this IServiceCollection services)
     {
@@ -35,6 +38,11 @@ public static class DependencyInjectionExtensions
             options.UseLoggerFactory(loggerFactory);
             options.UseCamelCaseNamingConvention();
         });
+    }
+
+    private static void AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IBookRepository, BookRepository>();
     }
 
     private static void AddDateTimeProvider(this IServiceCollection services)

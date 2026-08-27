@@ -10,7 +10,7 @@
 		<AnalysisMode>All</AnalysisMode>
 		<LangVersion>latest</LangVersion>
 		<IsTestProject>$([System.String]::Copy('$(MSBuildProjectName)').Contains('Tests'))</IsTestProject>
-        <NoWarn>$(NoWarn);CS1591;CA2225;S3875;CA1062;CA2007</NoWarn>
+        <NoWarn>$(NoWarn);CS1591;CA2225;S3875;CA1062;CA2007;CA1040;CA1515;CA1848;CA1873;CA1812</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(IsTestProject)' == 'false'">
