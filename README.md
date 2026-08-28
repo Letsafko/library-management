@@ -45,7 +45,7 @@ dotnet dev-certs https --trust
 
 ![endpoints](docs/openapi.png)
 
-## Class use cases
+## Use cases diagram
 
 ![Photo de profil](docs/usecases-daigram.svg)
 
