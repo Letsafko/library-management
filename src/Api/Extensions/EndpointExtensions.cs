@@ -37,6 +37,7 @@ internal static class EndpointExtensions
     {
         var apiVersionSet = app.NewApiVersionSet()
             .HasApiVersion(new ApiVersion(1))
+            .ReportApiVersions()
             .Build();
 
         return app
