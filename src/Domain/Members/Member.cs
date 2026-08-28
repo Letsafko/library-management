@@ -48,7 +48,7 @@ public class Member : Entity<int>
     
     public bool HasReachedLoanLimit => ActiveLoansCount >= MembershipType.MaxSimultaneousLoans;
     public int ActiveLoansCount => _loans.Count(l => !l.IsReturned);
-    public MembershipType MembershipType { get; private set; }
+    public MembershipType MembershipType { get; }
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public string Email {get; private set; }

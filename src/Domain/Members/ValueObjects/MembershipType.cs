@@ -22,6 +22,8 @@ public sealed class MembershipType : ValueObject
     {
         return All.Single(mt => mt.Name == membershipName);
     }
+
+    public static bool IsValid(string? name) => All.Any(mt => mt.Name == name);
     
     public int MaxSimultaneousLoans { get; }
     public TimeSpan LoanDuration { get; }

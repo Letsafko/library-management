@@ -16,6 +16,12 @@ public sealed class MemberRepository(ApplicationDbContext context) : IMemberRepo
             .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
     }
 
+    public async Task AddAsync(Member member, CancellationToken cancellationToken)
+    {
+        context.Members.Add(member);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task UpdateAsync(Member member, BookCopy bookCopy, CancellationToken cancellationToken)
     {
         context.Update(member);

@@ -8,6 +8,7 @@ namespace Application;
 public interface IMemberRepository
 {
     Task<Member?> GetByIdAsync(int id, CancellationToken cancellationToken);
+    Task AddAsync(Member member, CancellationToken cancellationToken);
     Task UpdateAsync(Member member, BookCopy bookCopy, CancellationToken cancellationToken);
     Task UpdateAsync(Member member, CancellationToken cancellationToken);
 }
