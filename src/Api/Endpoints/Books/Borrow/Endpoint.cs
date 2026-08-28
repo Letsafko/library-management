@@ -1,14 +1,14 @@
 using System.Threading;
 using Api.Extensions;
 using Api.ViewModels;
-using Application.Features.Loans;
-using Application.Features.Loans.BorrowBook;
+using Application.Features.Books.Borrow;
+using Application.Features.Models;
 using Application.Messaging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace Api.Endpoints.Loans.BorrowBook;
+namespace Api.Endpoints.Books.Borrow;
 
 internal sealed class Endpoint : IEndpoint
 {

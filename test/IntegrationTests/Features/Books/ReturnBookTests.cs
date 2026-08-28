@@ -17,7 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.Primitives;
 using Xunit;
 
-namespace IntegrationTests.Features.Loans;
+namespace IntegrationTests.Features.Books;
 
 [Collection(ApplicationCollectionFixture.Name)]
 public sealed class ReturnBookTests(ApplicationFixture fixture)

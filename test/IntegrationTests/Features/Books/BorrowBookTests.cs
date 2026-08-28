@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Api.Endpoints.Loans.BorrowBook;
+using Api.Endpoints.Books.Borrow;
 using Api.ViewModels;
 using Bogus;
 using Domain.Books;
@@ -19,7 +18,7 @@ using SharedKernel.Primitives;
 using Support.SharedTests.Fakers;
 using Xunit;
 
-namespace IntegrationTests.Features.Loans;
+namespace IntegrationTests.Features.Books;
 
 [Collection(ApplicationCollectionFixture.Name)]
 public sealed class BorrowBookTests(ApplicationFixture fixture)

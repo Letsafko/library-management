@@ -1,4 +1,4 @@
-namespace Api.Endpoints.Loans.BorrowBook;
+namespace Api.Endpoints.Books.Borrow;
 
 public sealed class Request
 {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Domain.Books;
 using Domain.Members;
 
-namespace Application.Features.Loans;
+namespace Application;
 
 public interface IMemberRepository
 {

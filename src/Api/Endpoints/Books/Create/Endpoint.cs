@@ -3,6 +3,7 @@ using Api.Extensions;
 using Api.ViewModels;
 using Application.Features.Books;
 using Application.Features.Books.Create;
+using Application.Features.Models;
 using Application.Messaging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Domain.Books;
 
-namespace Application.Features.Books;
+namespace Application;
 
 public interface IBookRepository
 {

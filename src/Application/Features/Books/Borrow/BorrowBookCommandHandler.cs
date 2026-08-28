@@ -1,12 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Features.Books;
+using Application.Features.Models;
 using Application.Messaging;
 using Domain.Books;
 using Domain.Members;
 using SharedKernel.Primitives;
 
-namespace Application.Features.Loans.BorrowBook;
+namespace Application.Features.Books.Borrow;
 
 public sealed class BorrowBookCommandHandler(
     IMemberRepository memberRepository,

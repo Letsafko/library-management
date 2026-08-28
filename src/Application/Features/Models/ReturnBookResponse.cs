@@ -1,7 +1,7 @@
 using System;
 using Domain.Loans.ValueObjects;
 
-namespace Application.Features.Loans;
+namespace Application.Features.Models;
 
 public sealed record ReturnBookResponse
 {

@@ -1,5 +1,5 @@
 using System;
-using Application.Features.Loans;
+using Application.Features.Models;
 
 namespace Api.ViewModels;
 

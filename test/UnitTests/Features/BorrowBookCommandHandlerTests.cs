@@ -1,9 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application;
 using Application.Features.Books;
-using Application.Features.Loans;
-using Application.Features.Loans.BorrowBook;
+using Application.Features.Books.Borrow;
+using Application.Features.Models;
 using Bogus;
 using Domain.Books;
 using Domain.Members;

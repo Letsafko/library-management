@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Application.Features.Models;
 using Application.Messaging;
 using Domain.Books;
 using SharedKernel.Primitives;

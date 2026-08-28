@@ -1,6 +1,6 @@
-using Application.Features.Loans.BorrowBook;
+using Application.Features.Books.Borrow;
 
-namespace Api.Endpoints.Loans.BorrowBook;
+namespace Api.Endpoints.Books.Borrow;
 
 internal static class Extensions
 {

@@ -2,7 +2,7 @@
 using System.Linq;
 using Domain.Books;
 
-namespace Application.Features.Books;
+namespace Application.Features.Models;
 
 public sealed record BookResponse
 {

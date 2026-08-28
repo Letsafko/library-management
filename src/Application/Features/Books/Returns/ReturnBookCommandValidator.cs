@@ -2,11 +2,11 @@ using Domain.Books;
 using Domain.Members;
 using FluentValidation;
 
-namespace Application.Features.Loans.BorrowBook;
+namespace Application.Features.Books.Returns;
 
-public sealed class BorrowBookCommandValidator : AbstractValidator<BorrowBookCommand>
+public sealed class ReturnBookCommandValidator : AbstractValidator<ReturnBookCommand>
 {
-    public BorrowBookCommandValidator()
+    public ReturnBookCommandValidator()
     {
         RuleFor(x => x.MemberId)
             .GreaterThan(0)
