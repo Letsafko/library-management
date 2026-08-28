@@ -3,5 +3,5 @@
 internal static class Tags
 {
     internal const string Books = "Books";
-    internal const string Loans = "Loans";
+    internal const string Members = "Members";
 }

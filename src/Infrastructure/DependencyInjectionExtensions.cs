@@ -1,5 +1,4 @@
 ﻿using Application;
-using Application.Features.Books;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Options;
 using Microsoft.EntityFrameworkCore;

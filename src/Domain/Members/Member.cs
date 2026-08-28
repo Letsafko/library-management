@@ -11,6 +11,9 @@ namespace Domain.Members;
 
 public class Member : Entity<int>
 {
+    private const decimal MaxPenaltyPerLoan = 10.00m;
+    private const decimal PenaltyPerDay = 0.20m;
+    
     private readonly List<Loan> _loans;
     protected Member(
         string firstName,
@@ -94,18 +97,22 @@ public class Member : Entity<int>
         return penalty;
     }
     
+    public decimal GetTotalPendingPenalties(DateTime currentDatetime)
+    {
+        return _loans
+            .Where(l => !l.IsReturned)
+            .Sum(l => Math.Min(l.GetDaysLate(currentDatetime) * PenaltyPerDay, MaxPenaltyPerLoan));
+    }
+
     private static Result<Money> CalculatePenalty(int daysLate)
     {
         if (daysLate <= 0)
         {
             return Money.Zero;
         }
-
-        const decimal maxPenaltyAmount = 10.00m;
-        const decimal penaltyPerDay = 0.20m;
         
-        var totalPenalty = daysLate * penaltyPerDay;
-        var cappedPenalty = Math.Min(totalPenalty, maxPenaltyAmount);
+        var totalPenalty = daysLate * PenaltyPerDay;
+        var cappedPenalty = Math.Min(totalPenalty, MaxPenaltyPerLoan);
 
         return Money.Create(cappedPenalty);
     }

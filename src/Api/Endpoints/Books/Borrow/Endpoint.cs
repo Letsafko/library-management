@@ -28,7 +28,7 @@ internal sealed class Endpoint : IEndpoint
                     onFailure: CustomResults.Problem);
             })
             .WithName("BorrowBook")
-            .WithTags(Tags.Loans)
+            .WithTags(Tags.Books)
             .WithSummary("Borrow a book copy")
             .WithDescription("Allows a member to borrow an available book copy.")
             .Produces<LoanViewModel>(StatusCodes.Status201Created)

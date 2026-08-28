@@ -28,10 +28,10 @@ internal sealed class Endpoint : IEndpoint
                     onFailure: CustomResults.Problem);
             })
             .WithName("ReturnBook")
-            .WithTags(Tags.Loans)
+            .WithTags(Tags.Books)
             .WithSummary("Return a borrowed book copy")
             .WithDescription("Allows a member to return a borrowed book copy. Returns penalty if overdue.")
-            .Produces<ReturnBookViewModel>(StatusCodes.Status200OK)
+            .Produces<ReturnBookViewModel>()
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
